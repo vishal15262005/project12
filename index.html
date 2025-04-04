@@ -1,0 +1,632 @@
+<body>
+    <div class="logo">FARM&CO</div>
+    <!-- Rest of your webpage content -->
+</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock Disease Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Livestock Disease Detection</h1>
+
+    <!-- File Upload Form -->
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*">
+        <br><br>
+        <button type="submit">Upload & Detect</button>
+    </form>
+    
+    <hr>
+    
+    <!-- Live Camera Capture -->
+    <h3>Capture from Camera</h3>
+    <video id="video" width="300" height="300" autoplay></video>
+    <br>
+    <button onclick="captureImage()">Capture & Detect</button>
+    <canvas id="canvas" class="hidden"></canvas>
+    
+    <hr>
+    
+    <!-- Results Display -->
+    {% if file_path %}
+        <h3>Prediction Result</h3>
+        <img src="{{ file_path }}" alt="Uploaded Image">
+        <p class="result">{{ result_display }}</p>
+        <p class="confidence">Confidence: {{ confidence }}%</p>
+        <p>{{ message }}</p>
+
+        {% if precautions %}
+            <h4>Precautions:</h4>
+            <ul>
+                {% for precaution in precautions %}
+                    <li>{{ precaution }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock Care</title>
+</head>
+<body>
+    <h2>🔹 Veterinary Assistance</h2>
+    <button onclick="window.location.href='/veterinary'">Find Veterinary Help</button>
+
+
+    <script>
+        function openVeterinaryPage() {
+            window.location.href = "veterinary.html"; // Opens the new page
+        }
+    </script>
+</body>
+</html>
+
+  <!-- Health Analysis -->
+  <h2>🔍 Health & Productivity Insights</h2>
+  <form id="growthForm">
+      <label for="age">Enter Cattle Age (months):</label>
+      <input type="number" id="age" name="age" required>
+  
+      <label for="weight">Enter Cattle Weight (kg):</label>
+      <input type="number" id="weight" name="weight" required>
+  
+      <label for="milking">Is it a Milking Cow?</label>
+      <select id="milking" name="milking">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+      </select>
+  
+      <button type="button" onclick="predictGrowth()">Predict Growth</button>
+  </form>
+  
+  <p id="growthResult"></p>
+  <ul id="productivitySuggestions"></ul>  <!-- Changed <p> to <ul> for better formatting -->
+  
+  <script>
+  function predictGrowth() {
+      let age = document.getElementById("age").value;
+      let weight = document.getElementById("weight").value;
+      let milking = document.getElementById("milking").value;
+  
+      fetch('/predict_growth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ age: age, weight: weight, milking: milking })
+      })
+      .then(response => response.json())
+      .then(data => {
+          document.getElementById("growthResult").innerHTML = `<strong>${data.prediction}</strong>`;
+  
+          // Convert suggestions to a list
+          let suggestionList = data.suggestions.map(point => `<li>${point}</li>`).join("");
+          document.getElementById("productivitySuggestions").innerHTML = suggestionList;
+      })
+      .catch(error => console.error("Error:", error));
+  }
+  </script>
+  
+    <!-- Chatbox -->
+    <div class="chatbox">
+        <div class="chat-header">Chat with Bot</div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
+    
+   <!-- Insurance Box (Interactive) -->
+<div id="insurance-box" class="insurance-box">
+    <h3>🐄 Cow Insurance Info</h3>
+    <p><strong>Why Insure?</strong> Protect your cattle from theft, disease, and disasters. The Tamil Nadu government provides subsidized livestock insurance schemes covering up to 50-70% of the premium cost.</p>
+    <button onclick="toggleDetails()">More Details</button>
+    <div id="insurance-details" style="display: none;">
+        <p><strong>Government Scheme:</strong> Tamil Nadu Livestock Insurance Scheme</p>
+        <p><strong>Next Registration Date:</strong> <span style="color: red;">July 15 - August 30, 2025</span></p>
+        <p><strong>Coverage:</strong> Death, illness, accident, natural disasters, and pregnancy complications.</p>
+        <p><strong>Eligibility:</strong> Farmers owning livestock registered under veterinary health records.</p>
+        <p><strong>Subsidy:</strong> Up to <span style="color: green;">70% of the premium</span> covered by the government.</p>
+        <p><strong>Premium Cost:</strong> ₹2000 - ₹2500 per year. After subsidy, farmers may pay as low as ₹600 - ₹800.</p>
+        <p><strong>Payout Example:</strong> If a cow insured for ₹50,000 faces an incident, the farmer receives the insured amount minus processing fees, ensuring financial protection.</p>
+        <p><strong>Required Documents:</strong></p>
+        <ul>
+            <li>Aadhaar Card</li>
+            <li>Livestock ownership proof</li>
+            <li>Recent photographs of the insured cattle</li>
+            <li>Bank account details for claim settlement</li>
+        </ul>
+        <p><strong>Apply Now:</strong> Visit the official portal:</p>
+        <p><a href="https://www.tn.gov.in/scheme/insurance" target="_blank" style="color: blue; text-decoration: underline;">🐄 Apply for Livestock Insurance</a></p>
+    </div>
+</div>
+
+
+    <!-- 📊 Premium Calculator -->
+    <div id="premium-calculator">
+        <h3>📊 Livestock Insurance Premium Calculator</h3>
+        <label for="livestock-value">Enter Livestock Value (₹):</label>
+        <input type="number" id="livestock-value" placeholder="e.g. 50000">
+        
+        <label for="insurance-type">Select Insurance Type:</label>
+        <select id="insurance-type">
+            <option value="normal">Normal (50% Subsidy)</option>
+            <option value="premium">Premium (70% Subsidy)</option>
+        </select>
+
+        <button onclick="calculatePremium()">Calculate Premium</button>
+        <h4 id="premium-result"></h4>
+    </div>
+
+    <script>
+        function toggleDetails() {
+            var details = document.getElementById("insurance-details");
+            details.style.display = details.style.display === "none" ? "block" : "none";
+        }
+
+        function calculatePremium() {
+            let livestockValue = document.getElementById("livestock-value").value;
+            let insuranceType = document.getElementById("insurance-type").value;
+            let subsidyRate = insuranceType === "premium" ? 0.7 : 0.5;
+            let basePremium = livestockValue * 0.05;
+            let finalPremium = basePremium * (1 - subsidyRate);
+
+            document.getElementById("premium-result").innerHTML = `Estimated Premium After Subsidy: <strong>₹${finalPremium.toFixed(2)}</strong>`;
+        }
+
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let context = canvas.getContext('2d');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(error => { console.error("Error accessing webcam: ", error); });
+
+        function captureImage() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let imageData = canvas.toDataURL("image/jpeg");
+
+            fetch('/capture', {
+                method: 'POST',
+                body: JSON.stringify({ image: imageData }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    alert("Prediction: " + data.result_display + "\nConfidence: " + data.confidence + "%");
+                    location.reload();
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function sendMessage() {
+            let input = document.getElementById("chatInput");
+            let message = input.value.trim();
+            if (message === "") return;
+
+            let chatBody = document.getElementById("chatBody");
+            let userMessage = document.createElement("div");
+            userMessage.className = "user-message";
+            userMessage.textContent = message;
+            chatBody.appendChild(userMessage);
+            input.value = "";
+
+            fetch('/chat', {
+                method: 'POST',
+                body: JSON.stringify({ message: message }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                let botMessage = document.createElement("div");
+                botMessage.className = "bot-message";
+                botMessage.textContent = data.reply;
+                chatBody.appendChild(botMessage);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prevalence Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet Consultation Request</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        h2 { color: #007BFF; }
+        form { margin: 20px auto; width: 50%; background: #f4f4f4; padding: 15px; border-radius: 8px; }
+        input, textarea, button { width: 95%; padding: 10px; margin: 5px; }
+        table { width: 80%; margin: 20px auto; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
+        th { background: #007BFF; color: white; }
+        .pending { color: orange; font-weight: bold; }
+        .accepted { color: green; font-weight: bold; }
+        .rejected { color: red; font-weight: bold; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vet Consultation Request</title>
+    <style>
+button {
+    background-color: #25D366; /* WhatsApp Green */
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Adjust padding for better fit */
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: auto; /* Change from full width to auto */
+    display: inline-block; /* Ensure it only takes necessary space */
+    text-align: center;
+    white-space: nowrap; /* Prevent button text from wrapping */
+    min-width: 150px; /* Ensures consistent button width */
+}
+
+button:hover {
+    background-color: #1EBE5D;
+}
+
+h1 {
+    font-size: 38px; /* Bigger title */
+    font-weight: bold;
+    color: #ffffff; /* Royal Purple */
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif; /* Modern font */
+    text-transform: uppercase; /* Make text all caps */
+    letter-spacing: 2px; /* Spacing between letters */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3); /* Smooth shadow */
+}
+
+
+    </style>
+</head>
+<body>
+
+    <h2>🐾 Vet Consultation Request</h2>
+    
+    <form id="vetForm">
+        <label>📍 Select Vet Hospital Number:</label>
+        <input type="text" id="vetNumber" value="917810065192" required>
+
+        <label>👤 Farmer Name:</label>
+        <input type="text" id="farmerName" required>
+
+        <label>📅 Date:</label>
+        <input type="date" id="date" required>
+
+        <label>⏰ Time:</label>
+        <input type="time" id="time" required>
+
+        <label>📝 Reason:</label>
+        <textarea id="reason" placeholder="Enter reason" required></textarea>
+
+        <button type="button" onclick="sendWhatsAppMessage()">📩 Send Request via WhatsApp</button>
+    </form>
+
+    <script>
+    function sendWhatsAppMessage() {
+        let vetNumber = document.getElementById("vetNumber").value;
+        let farmerName = document.getElementById("farmerName").value;
+        let date = document.getElementById("date").value;
+        let time = document.getElementById("time").value;
+        let reason = document.getElementById("reason").value;
+
+        if (!vetNumber || !farmerName || !date || !time || !reason) {
+            alert("❗ Please fill all fields before sending the request.");
+            return;
+        }
+
+        let message = `Hello Doctor,%0A
+        I want to book a vet consultation.%0A
+        👤 Farmer: ${farmerName}%0A
+        📅 Date: ${date}%0A
+        ⏰ Time: ${time}%0A
+        📝 Reason: ${reason}`;
+
+        let waLink = `https://wa.me/${vetNumber}?text=${message}`;
+        window.open(waLink, "_blank");
+    }
+    </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Alert System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            text-align: left;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .alert-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: red;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        /* Popup Styling */
+#alertPopup {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ff4747; /* Red background for alert */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1000;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out, bounce 0.5s ease-in-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -70%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, -50%); }
+    50% { transform: translate(-50%, -55%); }
+}
+
+/* Button Styling - No Full Width */
+button {
+    background-color: #25D366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    display: inline-block; /* Ensure it doesn’t take full width */
+    width: auto; /* Adjust button width to content */
+}
+
+/* Button Hover Effect */
+button:hover {
+    background-color: #1EBE5D;
+    transform: scale(1.1); /* Slight increase on hover */
+}
+
+    </style>
+</head>
+<body>
+
+    <h2>🌾 Price Alert System</h2>
+    <div class="container">
+        <label>Enter Item Name:</label>
+        <input type="text" id="itemName" placeholder="E.g., Tomato">
+
+        <label>Set Current Price (₹):</label>
+        <input type="number" id="itemPrice" placeholder="E.g., 56">
+
+        <label>Set Alert Price (₹):</label>
+        <input type="number" id="alertPrice" placeholder="E.g., 50">
+
+        <button onclick="setPrice()">Set Price</button>
+        <button onclick="setAlert()">Set Alert Price</button>
+    </div>
+
+    <div id="alertPopup" class="alert-popup"></div>
+
+    <script>
+        let storedPrice = 0;
+        let alertThreshold = 0;
+        let itemName = '';
+
+        function setPrice() {
+            itemName = document.getElementById("itemName").value;
+            storedPrice = parseFloat(document.getElementById("itemPrice").value);
+
+            if (!itemName || isNaN(storedPrice)) {
+                alert("❗ Please enter valid item name and price.");
+                return;
+            }
+
+            alert(`✅ Price for ${itemName} set successfully at ₹${storedPrice}`);
+            checkAlert(); // Check if alert should be triggered
+        }
+
+        function setAlert() {
+            alertThreshold = parseFloat(document.getElementById("alertPrice").value);
+
+            if (isNaN(alertThreshold)) {
+                alert("❗ Please enter a valid alert price.");
+                return;
+            }
+
+            alert(`✅ Alert price set at ₹${alertThreshold}`);
+            checkAlert(); // Check if alert should be triggered
+        }
+
+        function checkAlert() {
+            if (storedPrice > alertThreshold && alertThreshold > 0) {
+                document.getElementById("alertPopup").innerHTML = `⚠️ ALERT: ${itemName} price has exceeded ₹${alertThreshold}! Current Price: ₹${storedPrice}`;
+                document.getElementById("alertPopup").style.display = "block";
+
+                // Hide alert after 5 seconds
+                setTimeout(() => {
+                    document.getElementById("alertPopup").style.display = "none";
+                }, 5000);
+            }
+        }
+       
+    </script>
+
+  <div id="alertPopup" class="alert-popup"></div>
+
+  <h3>📊 Price Chart</h3>
+  <canvas id="priceChart"></canvas>
+
+  <script>
+      let storedPrices = {}; // Stores item prices
+      let alertThresholds = {}; // Stores alert prices
+      let chart; 
+
+      function setPrice() {
+          let itemName = document.getElementById("itemName").value;
+          let itemPrice = parseFloat(document.getElementById("itemPrice").value);
+
+          if (!itemName || isNaN(itemPrice)) {
+              alert("❗ Please enter a valid item name and price.");
+              return;
+          }
+
+          storedPrices[itemName] = itemPrice;
+          alert(`✅ Price for ${itemName} set successfully at ₹${itemPrice}`);
+          updateChart();
+          checkAlert(itemName);
+      }
+
+      function setAlert() {
+          let itemName = document.getElementById("itemName").value;
+          let alertPrice = parseFloat(document.getElementById("alertPrice").value);
+
+          if (!itemName || isNaN(alertPrice)) {
+              alert("❗ Please enter a valid alert price.");
+              return;
+          }
+
+          alertThresholds[itemName] = alertPrice;
+          alert(`✅ Alert price for ${itemName} set at ₹${alertPrice}`);
+          checkAlert(itemName);
+      }
+
+      function checkAlert(itemName) {
+          if (storedPrices[itemName] > (alertThresholds[itemName] || 0)) {
+              document.getElementById("alertPopup").innerHTML = `⚠ ALERT: ${itemName} price has exceeded ₹${alertThresholds[itemName]}! Current Price: ₹${storedPrices[itemName]}`;
+              document.getElementById("alertPopup").style.display = "block";
+
+              setTimeout(() => {
+                  document.getElementById("alertPopup").style.display = "none";
+              }, 5000);
+          }
+      }
+
+      function updateChart() {
+          let ctx = document.getElementById("priceChart").getContext("2d");
+          
+          let labels = Object.keys(storedPrices);
+          let prices = Object.values(storedPrices);
+          let alertPrices = labels.map(item => alertThresholds[item] || 0);
+
+          let backgroundColors = labels.map(item => 
+              storedPrices[item] > (alertThresholds[item] || 0) ? "#ff4747" : "#25D366"
+          );
+
+          if (chart) {
+              chart.destroy();
+          }
+
+          chart = new Chart(ctx, {
+              type: "bar",
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: "Current Price",
+                      data: prices,
+                      backgroundColor: backgroundColors,
+                      borderColor: "#333",
+                      borderWidth: 1
+                  },
+                  {
+                      label: "Alert Price",
+                      data: alertPrices,
+                      backgroundColor: "#FFA500",
+                      borderColor: "#555",
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  scales: {
+                      y: { beginAtZero: true }
+                  },
+                  animation: {
+                      duration: 1500,
+                      easing: 'easeOutBounce'
+                  }
+              }
+          });
+      }
+  </script>
+
+</body>
+</html>
